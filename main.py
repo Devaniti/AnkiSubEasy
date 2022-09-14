@@ -38,10 +38,9 @@ if __name__ == '__main__':
     tagger = fugashi.Tagger()
     for line in lines:
         for word_tag in tagger(line):
-            word = str(word_tag)
-            if (string_contains_kanji(word)):
+            word = str(word_tag.feature.orthBase)
+            if string_contains_kanji(word) and word not in words:
                 words.append(word)
-    words = list(dict.fromkeys(words))
 
     cards = []
     for word in words:
