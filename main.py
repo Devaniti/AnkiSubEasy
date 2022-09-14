@@ -56,7 +56,7 @@ if __name__ == '__main__':
             cardFurigana = cardWord + '[' + str(entry.kana_forms[0]) + ']'
             cards.append([cardWord, cardMeaning, cardFurigana])
 
-    with open("test.csv", "w", encoding="utf-8") as f:
+    with open(args.out, "w", encoding="utf-8") as f:
         f.write('\n'.join(['^'.join(card) for card in cards]))
 
     if args.knownlist != None:
