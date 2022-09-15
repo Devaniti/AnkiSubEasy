@@ -47,6 +47,3 @@ def solve_furigana(kanji_form, kana_form):
         return result[0].lstrip()
     print("Failed to solve furigana for:[" + kanji_form + "," + kana_form + "]")
     return kanji_form + '[' + kana_form + ']'
-
-if __name__ == '__main__':
-    solve_furigana('１０分', 'じっぷん')
