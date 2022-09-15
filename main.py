@@ -31,21 +31,21 @@ if __name__ == '__main__':
     for file in files:
         subtitles = parser.parse(file)
         for subtitle in subtitles:
-            lines.append(subtitle.text)
+            lines.append([subtitle.text, file])
 
-    lines = [filter_text(line) for line in lines]
+    lines = [[filter_text(line[0]), line[1]] for line in lines]
 
     words = []
     tagger = fugashi.Tagger()
     for line in lines:
-        for word_tag in tagger(line):
+        for word_tag in tagger(line[0]):
             word = str(word_tag.feature.orthBase)
             if string_contains_kanji(word) and word not in words:
-                words.append(word)
+                words.append([word, line[1]])
 
     cards = []
     for word in words:
-        lookup = jam.lookup(word)
+        lookup = jam.lookup(word[0])
         if len(lookup.entries) > 0:
             entry = lookup.entries[0]
             cardWord = str(entry.kanji_forms[0])
@@ -54,7 +54,7 @@ if __name__ == '__main__':
             knownlist.append(cardWord)
             cardMeaning = str('; '.join([', '.join([gloss.text for gloss in sense.gloss]) for sense in entry.senses])).strip()
             cardFurigana = solve_furigana(cardWord, str(entry.kana_forms[0]))
-            cards.append([cardWord, cardMeaning, cardFurigana])
+            cards.append([cardWord, cardMeaning, cardFurigana, word[1]])
 
     with open(args.out, "w", encoding="utf-8") as f:
         f.write('\n'.join(['^'.join(card) for card in cards]))
