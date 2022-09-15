@@ -2,6 +2,7 @@ import argparse
 import fugashi
 from pysubparser import parser
 from jamdict import Jamdict
+from furigana_solver import solve_furigana
 from japanese_test import string_contains_kanji
 from text_filter import filter_text
 
@@ -52,7 +53,7 @@ if __name__ == '__main__':
                 continue
             knownlist.append(cardWord)
             cardMeaning = str('; '.join([', '.join([gloss.text for gloss in sense.gloss]) for sense in entry.senses])).strip()
-            cardFurigana = cardWord + '[' + str(entry.kana_forms[0]) + ']'
+            cardFurigana = solve_furigana(cardWord, str(entry.kana_forms[0]))
             cards.append([cardWord, cardMeaning, cardFurigana])
 
     with open(args.out, "w", encoding="utf-8") as f:
@@ -61,5 +62,3 @@ if __name__ == '__main__':
     if args.knownlist != None:
         with open(args.knownlist, "w", encoding="utf-8") as f:
             f.write('\n'.join(knownlist))
-
-    print(cards)

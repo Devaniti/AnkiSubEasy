@@ -4,6 +4,7 @@ Kana_Ranges = [
 ]
 
 Kanji_Ranges = [
+  {"from": ord(u"\u3005"), "to": ord(u"\u3005")},         # Ideographic Iteration Mark
   {"from": ord(u"\u4e00"), "to": ord(u"\u9fff")},         # CJK Unified Ideographs
   {"from": ord(u"\u3400"), "to": ord(u"\u4dbf")},         # CJK Unified Ideographs Extension A
   {"from": ord(u"\U00020000"), "to": ord(u"\U0002a6df")}, # CJK Unified Ideographs Extension B
@@ -13,6 +14,11 @@ Kanji_Ranges = [
 ]
 
 Japanese_Ranges = Kana_Ranges + Kanji_Ranges
+
+Digit_Ranges = [
+  {"from": ord(u"\u0030"), "to": ord(u"\u0039")},         # Basic Latin digits
+  {"from": ord(u"\uFF10"), "to": ord(u"\uFF19")},         # Fullwidth digits
+]
 
 def is_japanese_char(char):
   return any([range["from"] <= ord(char) <= range["to"] for range in Japanese_Ranges])
@@ -31,3 +37,9 @@ def is_kanji_char(char):
 
 def string_contains_kanji(string):
   return any([is_kanji_char(char) for char in string])
+
+def is_digit_char(char):
+  return any([range["from"] <= ord(char) <= range["to"] for range in Digit_Ranges])
+
+def string_contains_digits(string):
+  return any([is_digit_char(char) for char in string])
