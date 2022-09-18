@@ -9,7 +9,7 @@ from text_filter import filter_text
 jam = Jamdict()
 
 if __name__ == '__main__':
-    argparser = argparse.ArgumentParser(description='Converts subtitles to anki cards.')
+    argparser = argparse.ArgumentParser(description='Converts Japanese subtitles to anki cards.')
     argparser.add_argument('filename', metavar='InFile', type=str, nargs='+',
                         help='file to get subtitle from')
     argparser.add_argument('--knownlist', metavar='KnownListFile', help='file to load/store list of known words')
@@ -28,21 +28,26 @@ if __name__ == '__main__':
     lines = []
     files = args.filename
 
+    # Read all lines from all provided subtitle file
     for file in files:
         subtitles = parser.parse(file)
         for subtitle in subtitles:
             lines.append([subtitle.text, file])
 
+    # Filter input text
     lines = [[filter_text(line[0]), line[1]] for line in lines]
 
+    # Parse lines into words with fugashi
     words = []
     tagger = fugashi.Tagger()
     for line in lines:
         for word_tag in tagger(line[0]):
+            # orthBase is vocabulary form that uses same script as input (kanji/kana)
             word = str(word_tag.feature.orthBase)
             if string_contains_kanji(word) and word not in words:
                 words.append([word, line[1]])
 
+    # Look up each word in vocabulary
     cards = []
     for word in words:
         lookup = jam.lookup(word[0])

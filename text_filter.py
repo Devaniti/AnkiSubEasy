@@ -18,6 +18,8 @@ def remove_nested_parentheses(string):
             ret += i
     return ret
 
+# Remove text in parenthesis 
+# assuming that parenthesis mainly include names which we don't want to generate cards for
 def filter_text(string):
     string = remove_nested_parentheses(string)
     for substitution in Substitution_List:
